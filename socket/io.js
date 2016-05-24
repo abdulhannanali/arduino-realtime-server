@@ -20,6 +20,17 @@ module.exports = function (server, redisClient) {
 				else if (response) {
 					socket.emit("response_data", populateResponse(response))
 				}
+				else if (!response) {
+					socket.emit("empty_data")
+				}
+			})
+		})
+
+		socket.on("clear_data", function (from, data) {
+			redisClient.del("arduino", function (error, response) {
+				if (!error && response) {
+					socket.emit("empty_data")
+				}
 			})
 		})
 
@@ -38,8 +49,12 @@ module.exports = function (server, redisClient) {
 	function populateResponse (response) {
 		var obj = {}
 		Object.keys(response).forEach(function (value) {
-			obj[mainSchema[value]] = response[value]
+			if (mainSchema.hasOwnProperty(value)) {
+				obj[mainSchema[value]] = response[value]
+			}
  		})
+
+ 		console.log(obj)
 
  		return obj
 	}

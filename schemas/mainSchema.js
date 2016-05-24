@@ -9,6 +9,5 @@ module.exports = {
 	t: "Temperature",
 	h: "Humidity",
 	d: "ppmv",
-	m: "Density",
 	mq: "MQ"
 }
